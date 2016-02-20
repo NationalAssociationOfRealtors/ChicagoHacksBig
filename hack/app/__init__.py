@@ -41,6 +41,7 @@ class App(Flask):
 
     def configure_dbs(self):
         influx = db.init_influxdb()
+        db.create_shards(influx)
 
     def init_dbs(self):
         g.INFLUX = db.init_influxdb()

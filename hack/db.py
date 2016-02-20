@@ -35,3 +35,10 @@ def init_influxdb():
             gevent.sleep(1)
 
     return INFLUX
+
+def create_shards(INFLUX):
+    logging.info("Creating Influxdb database, retention policies and continuous queries")
+    try:
+        res = INFLUX.create_database(config.INFLUX_DATABASE)
+    except Exception as e:
+        logging.error(e)

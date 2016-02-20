@@ -7,7 +7,6 @@ influxdata:
 influxdb:
     image: tutum/influxdb
     hostname: influxdb
-    log_driver: "syslog"
     ports:
         - "8086:8086"
         - "8083:8083"

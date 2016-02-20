@@ -1,11 +1,8 @@
 from flask import Flask, redirect, url_for, request, g
 from flask.ext.session import Session
-from pymongo.collection import Collection
-import pymongo
 from hack import config
 from hack import db
 from slugify import slugify
-import humongolus
 import logging
 import time
 
@@ -21,7 +18,6 @@ class App(Flask):
         self.teardown_request(self.teardown)
         self.after_request(self.teardown)
         try:
-            self.init_session()
             self.init_templates()
         except Exception as e:
             logging.exception(e)
@@ -30,13 +26,6 @@ class App(Flask):
         self.jinja_env.filters['slugify'] = slugify
 
     def teardown(self, exception):
-        db = getattr(g, 'MONGO', None)
-        if db is not None:
-            db.close()
-
-        if self.config.get('SESSION_MONGODB'):
-            self.config['SESSION_MONGODB'].close()
-
         return exception
 
     def configure_dbs(self):
@@ -45,12 +34,3 @@ class App(Flask):
 
     def init_dbs(self):
         g.INFLUX = db.init_influxdb()
-        g.MONGO = db.init_mongodb()
-        humongolus.settings(logging, g.MONGO)
-
-    def init_session(self):
-        self.config['SESSION_MONGODB'] = db.init_mongodb()
-        self.config['SESSION_MONGODB_DB'] = "app_sessions"
-        self.config['SESSION_MONGODB_COLLECT'] = "sessions"
-        self.config['SESSION_MONGODB']['app_sessions']['sessions'].create_index('id')
-        Session(self)

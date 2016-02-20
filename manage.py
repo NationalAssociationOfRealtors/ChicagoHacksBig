@@ -4,15 +4,12 @@ from hack import config
 from hack.app import App
 from hack import db
 from datetime import datetime
-import humongolus
 import logging
 import csv
 
 logging.basicConfig(level=logging.INFO)
 app = App()
 manager = Manager(app)
-MONGO = db.init_mongodb()
-humongolus.settings(logging, MONGO)
 
 class LoadData(Command):
 

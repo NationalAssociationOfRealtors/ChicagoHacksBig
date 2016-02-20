@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block style %}
+    html, body{
+        height: 100%;
+    }
+    #chart{
+        height: 500px;
+    }
+    svg{
+        height: 100%;
+    }
+{% endblock %}
+
+{% block content %}
+<div id="chart"><svg></svg></div>
+<script>
+    var data = {{data|safe}};
+    nv.addGraph(function() {
+        var chart = nv.models.scatterChart()
+            .x(function(d){ return new Date(d.x)})
+            .showDistX(true)    //showDist, when true, will display those little distribution lines on the axis.
+            .showDistY(true)
+            .color(d3.scale.category20().range());
+
+        //Configure how the tooltip looks.
+
+
+        //Axis settings
+        chart.xAxis.tickFormat(function(d) {
+            return d3.time.format('%m/%d %H:%M:%S')(new Date(d));
+        });
+        chart.yAxis.tickFormat(d3.format('.02f'));
+
+        //We want to show shapes other than circles.
+
+        d3.select('#chart svg')
+            .datum(data)
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+
+        return chart;
+    });
+
+    /**************************************
+    * Simple test data generator
+    */
+    function randomData(groups, points) { //# groups,# points per group
+        var data = [],
+        shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
+        random = d3.random.normal();
+
+        for (i = 0; i < groups; i++) {
+            data.push({
+                key: 'Group ' + i,
+                values: []
+            });
+
+            for (j = 0; j < points; j++) {
+                data[i].values.push({
+                    x: random()
+                    , y: random()
+                    , size: Math.random()   //Configure the size of each scatter point
+                    , shape: (Math.random() > 0.95) ? shapes[j % 6] : "circle"  //Configure the shape of each scatter point.
+                });
+            }
+        }
+        return data;
+    }
+</script>
+{% endblock %}

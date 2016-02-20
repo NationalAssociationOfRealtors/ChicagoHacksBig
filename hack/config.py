@@ -19,7 +19,6 @@ SERVER_NAME = os.getenv("SERVER_NAME")
 SESSION_COOKIE_NAME = "hack"
 SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_DOMAIN = ".{}".format(SERVER_NAME) if SERVER_NAME else None
-SESSION_TYPE = 'mongodb'
 PERMANENT_SESSION_LIFETIME = datetime.timedelta(hours=24)
 
 REMEMBER_COOKIE_NAME = "well_hello_there"
@@ -35,6 +34,3 @@ INFLUX_DATABASE = "hack"
 LOGGER_NAME = "hack"
 
 TEMPLATES = "{}/hack/views/templates".format(os.getcwd())
-
-MONGO_HOST = "mongo"
-MONGO_PORT = 27017

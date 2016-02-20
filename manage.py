@@ -1,0 +1,55 @@
+from flask import Flask, url_for
+from flask.ext.script import Manager, Command, Option
+from hack import config
+from hack.app import App
+from hack import db
+import logging
+
+logging.basicConfig(level=logging.INFO)
+app = App()
+manager = Manager(app)
+MONGO = db.init_mongodb()
+humongolus.settings(logging, MONGO)
+
+class RunWorker(Command):
+
+    def run(self):
+        logging.info("command!")
+
+class InitApplication(Command):
+
+    def run(self):
+        logging.info("Initializing Application...")
+        app.configure_dbs()
+        from lablog.triggers.node import CO2
+        from lablog.triggers.lab import Presence
+        from lablog.triggers.energy import InputFrequency
+        try:
+            c = CO2()
+            c.name = 'notify slack c02'#unique
+            c.key = 'node.co2'
+            c.save()
+            logging.info(c.key)
+            logging.info(c.name)
+        except: pass
+        try:
+            c = Presence()
+            c.name = 'notify slack presence'#unique
+            c.key = 'presence'
+            c.save()
+        except: pass
+        try:
+            c = InputFrequency()
+            c.name = 'check input frequency'#unique
+            c.key = 'energy.ups.input_frequency'
+            c.save()
+        except: pass
+        logging.info("Initialization Complete.")
+
+
+manager.add_command('command', RunWorker())
+manager.add_command('init_app', InitApplication())
+#python manager.py command
+
+if __name__ == "__main__":
+    manager.run()

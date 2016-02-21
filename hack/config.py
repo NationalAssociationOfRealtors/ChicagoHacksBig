@@ -2,7 +2,7 @@ import os
 import logging
 import datetime
 
-LOG_LEVEL = logging.INFO
+LOG_LEVEL = logging.DEBUG
 logging.basicConfig(level=LOG_LEVEL)
 DEBUG = True
 

@@ -1,20 +1,11 @@
-influxdata:
-    image: tutum/influxdb
-    command: "true"
-    volumes:
-        - /nar/influx:/data
-
 influxdb:
     image: tutum/influxdb
     hostname: influxdb
     ports:
         - "8086:8086"
         - "8083:8083"
-    volumes_from:
-        - influxdata
     environment:
-        INFLUXDB_VERSION: 0.9.4.1
-
+        INFLUXDB_VERSION: 0.9.6.1
 
 api:
     build: .

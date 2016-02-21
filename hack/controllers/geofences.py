@@ -12,25 +12,25 @@ geofence = Blueprint(
 )
 
 locations = [
-    {'id':11, 'name':'Chicago, IL', 'coords':[41.879676, -87.632599]},
-    {'id':24, 'name':'Madison, WI', 'coords':[43.073186, -89.405736]},
-    {'id':47, 'name':'Toronto, ON, CA', 'coords':[43.653606, -79.381498]},
-    {'id':10, 'name':'Boston, MA', 'coords':[42.359287, -71.056815]},
-    {'id':25, 'name':'New York, NY', 'coords':[40.712852, -73.997237]},
-    {'id':19, 'name':'Indianapolis, IN', 'coords':[39.767562, -86.168463]},
+    {'id':3, 'name':'Chicago, IL', 'coords':[41.879676, -87.632599]},
+    {'id':22, 'name':'Madison, WI', 'coords':[43.073186, -89.405736]},
+    {'id':29, 'name':'Toronto, ON, CA', 'coords':[43.653606, -79.381498]},
+    {'id':25, 'name':'Boston, MA', 'coords':[42.359287, -71.056815]},
+    {'id':10, 'name':'New York, NY', 'coords':[40.712852, -73.997237]},
+    {'id':42, 'name':'Indianapolis, IN', 'coords':[39.767562, -86.168463]},
     {'id':36, 'name':'St. Louis, MO', 'coords':[38.627942, -90.200757]},
-    {'id':22, 'name':'Louisville, KY', 'coords':[38.255073, -85.759862]},
-    {'id':29, 'name':'Nashville, TN', 'coords':[36.161062, -86.782506]},
+    {'id':47, 'name':'Louisville, KY', 'coords':[38.255073, -85.759862]},
+    {'id':24, 'name':'Nashville, TN', 'coords':[36.161062, -86.782506]},
     {'id':1, 'name':'Austin, TX', 'coords':[30.267961, -97.745856]},
-    {'id':18, 'name':'Dallas, TX', 'coords':[32.778453, -96.793145]},
-    {'id':30, 'name':'San Antonio, TX', 'coords':[30.267961, -97.750663]},
-    {'id':2, 'name':'Los Angeles, CA', 'coords':[34.057735, -118.257954]},
-    {'id':42, 'name':'Bay Area', 'coords':[37.774997, -122.418031]},
-    {'id':3, 'name':'Portland, OR', 'coords':[45.522213, -122.680516]},
-    {'id':32, 'name':'Seattle, WA', 'coords':[47.606893, -122.333166]},
-    {'id':50, 'name':'Vancouver, BC, CA', 'coords':[49.281868, -123.122885]},
-    {'id':9, 'name':'Victoria, BC, CA', 'coords':[48.428130, -123.363824]},
-];
+    {'id':11, 'name':'Dallas, TX', 'coords':[32.778453, -96.793145]},
+    {'id':2, 'name':'San Antonio, TX', 'coords':[30.267961, -97.750663]},
+    {'id':30, 'name':'Los Angeles, CA', 'coords':[34.057735, -118.257954]},
+    {'id':18, 'name':'Bay Area', 'coords':[37.774997, -122.418031]},
+    {'id':19, 'name':'Portland, OR', 'coords':[45.522213, -122.680516]},
+    {'id':9, 'name':'Seattle, WA', 'coords':[47.606893, -122.333166]},
+    {'id':32, 'name':'Vancouver, BC, CA', 'coords':[49.281868, -123.122885]},
+    {'id':50, 'name':'Victoria, BC, CA', 'coords':[48.428130, -123.363824]},
+]
 
 def get_location(id):
     for l in locations:
@@ -87,7 +87,7 @@ class StreamGraphMetro(MethodView):
     def get(self, metro_id):
         logging.info(metro_id)
         location = get_location(int(metro_id))
-        q = "SELECT COUNT(visits) as mean FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' and metro_id = '{}' GROUP BY place_name,time(15m) fill(0)".format(metro_id)
+        q = "SELECT COUNT(visits) as mean FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' and metro_id = '{}' GROUP BY place_name,time(15m) fill(none)".format(metro_id)
         res = g.INFLUX.query(q)
         data = []
         for i in res.items():
@@ -141,6 +141,24 @@ class MapHeatmapMetroView(MethodView):
             })
         return render_template("geofence/mapmetro.html", data=json.dumps(data), metro_id=metro_id, locations=json.dumps(locations))
 
+class MapSightingsMetroView(MethodView):
+
+    def get(self, metro_id):
+        q = "SELECT lat, lng, dwell_time, place_id FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' and metro_id='{}'".format(metro_id)
+        logging.info(q)
+        res = g.INFLUX.query(q)
+        data = []
+        for i in res.get_points():
+            logging.info(i)
+            data.append({
+                'dwell_time':i['dwell_time'],
+                'lat':i['lat'],
+                'lng':i['lng'],
+                'time':i['time'],
+                'place_id':i['place_id']
+            })
+        return render_template("geofence/mapmetrosightings.html", data=json.dumps(data), metro_id=metro_id, locations=json.dumps(locations))
+
 class Circles(MethodView):
 
     def get(self):
@@ -152,6 +170,7 @@ geofence.add_url_rule("/streamgraph", view_func=StreamGraph.as_view('streamgraph
 geofence.add_url_rule("/streamgraphcount", view_func=StreamGraphCount.as_view('streamgraphcount'))
 geofence.add_url_rule("/streamgraphmetro/<metro_id>", view_func=StreamGraphMetro.as_view('streamgraphmetro'))
 geofence.add_url_rule("/map", view_func=MapView.as_view('map'))
+geofence.add_url_rule("/map/<metro_id>/sightings", view_func=MapSightingsMetroView.as_view('mapmetrosightings'))
 geofence.add_url_rule("/map/<metro_id>", view_func=MapHeatmapMetroView.as_view('mapmetro'))
 geofence.add_url_rule("/mapanimated", view_func=MapHeatmapAnimatedView.as_view('mapanimated'))
 geofence.add_url_rule("/circles", view_func=Circles.as_view('circles'))

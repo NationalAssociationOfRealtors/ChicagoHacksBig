@@ -25,7 +25,7 @@
     <li>Metros
         <ul>
         {% for l in locations %}
-            <li><a href="{{url_for('.mapmetro', metro_id=l.id)}}">{{l.name}}</a></li>
+            <li><a href="{{url_for('.mapmetrosightings', metro_id=l.id)}}">{{l.name}}</a></li>
         {% endfor %}
         </ul>
     </li>

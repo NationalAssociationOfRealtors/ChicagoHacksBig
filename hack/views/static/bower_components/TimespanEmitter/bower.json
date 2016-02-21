@@ -1,0 +1,27 @@
+{
+  "name": "TimespanEmitter",
+  "main": "TimespanEmitter.js",
+  "homepage": "https://github.com/NationalAssociationOfRealtors/TimespanEmitter",
+  "authors": [
+    "Christopher Cote <chris@entropealabs.com>"
+  ],
+  "description": "Emit events for a given timespan at a variable playback rate",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "timeseries",
+    "timespan",
+    "events",
+    "listeners"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -28,32 +28,28 @@ class LoadData(Command):
                     measurement="geofence.sighting",
                     time=start,
                     tags=dict(
-                        visit_id=visit_id,
-                        start=start,
-                        end=end,
                         place_id=place_id,
                         place_name=place_name,
                         user=v2_user,
                         platform=platform,
-                        url=url,
-                        city=city,
-                        phone=phone,
-                        address=address,
-                        lat = float(lat) if lat != "#N/A" else 0,
-                        lng = float(lng) if lng != "#N/A" else 0,
                         metro_id=int(metro_id) if metro_id != "#N/A" else 0,
                         metro_title=metro_title,
+                        lat = float(lat) if lat != "#N/A" else 0.0,
+                        lng = float(lng) if lng != "#N/A" else 0.0,
                     ),
                     fields=dict(
                         visits=int(visits),
+                        visit_id=visit_id,
                         dwell_time=int(dwell_time),
                     ),
                 )
                 points.append(sighting)
-                #logging.info(sighting)
-                #SELECT * FROM "hack"."default"."geofence.sighting" WHERE metro_id=18
+            try:
+                influx.write_points(points)
+            except Exception as e:
+                logging.debug(e.message)
+                logging.exception(e)
 
-            influx.write_points(points)
 
 
 

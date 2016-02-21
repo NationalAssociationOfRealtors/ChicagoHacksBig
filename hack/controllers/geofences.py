@@ -106,7 +106,7 @@ class MapView(MethodView):
 class MapHeatmapAnimatedView(MethodView):
 
     def get(self):
-        q = "SELECT COUNT(visits) as visits, lat, lng, place_name FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' GROUP BY metro_title,time(15m)"
+        q = "SELECT COUNT(visits) as visits FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' GROUP BY metro_title,lat,lng,time(15m)"
         res = g.INFLUX.query(q)
         data = []
         for i in res.raw['series']:
@@ -120,9 +120,10 @@ class MapHeatmapAnimatedView(MethodView):
 class MapHeatmapMetroView(MethodView):
 
     def get(self, metro_id):
-        q = "SELECT COUNT(visits) as visits, lat, lng, place_name FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' GROUP BY metro_title,time(15m)"
+        q = "SELECT COUNT(visits) as visits FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' GROUP BY metro_title,lat,lng,time(15m)"
         res = g.INFLUX.query(q)
         data = []
+        logging.info(res.raw)
         for i in res.raw['series']:
             data.append({
                 'values':i['values'],

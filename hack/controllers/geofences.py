@@ -141,6 +141,10 @@ class MapHeatmapMetroView(MethodView):
             })
         return render_template("geofence/mapmetro.html", data=json.dumps(data), metro_id=metro_id, locations=json.dumps(locations))
 
+class Circles(MethodView):
+
+    def get(self):
+        return render_template('3d.html')
 
 geofence.add_url_rule("/", view_func=Index.as_view('index'))
 geofence.add_url_rule("/scatterplot", view_func=ScatterPlot.as_view('scatterplot'))
@@ -150,3 +154,4 @@ geofence.add_url_rule("/streamgraphmetro/<metro_id>", view_func=StreamGraphMetro
 geofence.add_url_rule("/map", view_func=MapView.as_view('map'))
 geofence.add_url_rule("/map/<metro_id>", view_func=MapHeatmapMetroView.as_view('mapmetro'))
 geofence.add_url_rule("/mapanimated", view_func=MapHeatmapAnimatedView.as_view('mapanimated'))
+geofence.add_url_rule("/circles", view_func=Circles.as_view('circles'))

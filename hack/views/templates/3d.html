@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+canvas { width: 100%; height: 100% }
+{% endblock %}
+
+{% block container %}
+    <script src="/static/bower_components/three.js/build/three.min.js"></script>
+    <script src="/static/bower_components/three.js/examples/js/controls/OrbitControls.js"></script>
+    <script>
+
+        var container
+        var camera, controls, scene, renderer;
+        var group = new THREE.Object3D();
+
+        var rooms = [
+            {name:'Entry', count:20, radius:25, color:0xFF0000},
+            {name:'Kitchen', count:50, radius:50, color:0x00FF33},
+            {name:'Reserved', count:100, radius:75, color:0xFFFF00},
+            {name:'Common', count:100, radius:100, color: 0xFF11CC},
+            {name:'Auditorium', count:300, radius:125, color: 0xFF3344},
+        ];
+
+        init();
+
+        function build(count, radius, color){
+            var people = [];
+            var lines = [];
+            for(var i=0; i<count; i++){
+                people.push(Math.random()*10);
+            }
+            var group = new THREE.Object3D();
+            var geometry = new THREE.Geometry();
+            var material = new THREE.LineBasicMaterial({ color: 0x999999, linewidth: 2 });
+            var material2 = new THREE.LineBasicMaterial({ color: color, linewidth: 1 });
+
+            for (var i = 0; i <= count; i++) {
+                var theta = (i / count) * Math.PI * 2;
+                geometry.vertices.push(
+                    new THREE.Vector3(
+                        Math.cos(theta) * radius,
+                        Math.sin(theta) * radius,
+                        0
+                    )
+                );
+            }
+
+            var circ = new THREE.Line(geometry, material)
+            group.add(circ)
+
+            for (var i = 0; i <= people.length; i++) {
+                var theta = (i / count) * Math.PI * 2;
+                var l = new THREE.Geometry();
+                l.vertices.push(
+                    new THREE.Vector3(
+                        Math.cos(theta) * radius,
+                        Math.sin(theta) * radius,
+                        0
+                    ),
+                    new THREE.Vector3(
+                        Math.cos(theta) * radius,
+                        Math.sin(theta) * radius,
+                        people[i]
+                    )
+                )
+                group.add(new THREE.Line(l, material2));
+                lines.push(l);
+            }
+            return {lines:lines, people:people, group:group};
+        }
+
+        function init(){
+            container = document.createElement( 'div' );
+            document.body.appendChild( container );
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000 );
+            camera.position.set(0, -200,  100);
+            camera.lookAt( scene.position );
+
+            for(var i in rooms){
+                rooms[i].data = build(rooms[i].count, rooms[i].radius, rooms[i].color);
+                group.add(rooms[i].data.group);
+            }
+
+            scene.add(group);
+
+            renderer = new THREE.WebGLRenderer( { antialias: true } ); // WebGLRenderer CanvasRenderer
+            renderer.setClearColor( 0x000000 );
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            controls = new THREE.OrbitControls( camera, renderer.domElement );
+            container.appendChild( renderer.domElement );
+
+            animate();
+        }
+
+        var rotation = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            for(var r in rooms){
+                for(var i=0; i<rooms[r].data.lines.length; i++){
+                    var m = Math.round(Math.random()) ? -.3 : .3;
+                    rooms[r].data.lines[i].vertices[1].z+=m;
+                    rooms[r].data.lines[i].verticesNeedUpdate = true;
+                }
+            }
+
+            group.rotation.z+=.002;
+            render();
+        }
+
+        function render(){
+            renderer.render( scene, camera );
+        }
+    </script>
+{% endblock %}

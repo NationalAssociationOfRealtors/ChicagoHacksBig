@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block container %}
-<div 'id'="map"></div>
+<div id="map"></div>
 <script>
     $('#map').height($(window).height()-50);
     var data = {{data|safe}};
@@ -20,9 +20,9 @@
         },
         onAdd: function (map) {
             var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-            container.'id' = "timestamp";
+            container.id = "timestamp";
             container.style.backgroundColor = 'white';
-            container.style.w'id'th = '260px';
+            container.style.width = '260px';
             container.style.height = '30px';
             container.style.padding = '7px';
             return container;
@@ -76,7 +76,7 @@
         $('#timestamp').html(new Date(data[0].values[index][0]));
         for(var i in data){
             var p = data[i];
-            if(p.values[index][1] !== 0){
+            if(p.values[index][1]){
                 d.push({
                     lat:p.lat,
                     lng:p.lng,
@@ -93,7 +93,6 @@
     }, 100);
 
     function goto_location(){
-        console.log(locations);
         map.panTo(new L.LatLng(
             locations[current_location].coords[0],
             locations[current_location].coords[1]

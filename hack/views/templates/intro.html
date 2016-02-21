@@ -1,33 +1,94 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Paint the Town Red</title>
+<style>
+body{
+	height: 100%;
+	margin:0;
+	background: #232323;
+	
+}
+@font-face {
+    font-family: 'CooperHewitt-Bold';
+    src: url('fonts/CooperHewitt-Bold.woff') format('woff');
+    font-style: bold;
+}
+@font-face {
+    font-family: 'CooperHewitt-Book';
+    src: url('fonts/CooperHewitt-Book.woff') format('woff');
+}
+@font-face {
+    font-family: 'CooperHewitt-Heavy';
+    src: url('fonts/CooperHewitt-Heavy.woff') format('woff');
+    font-style: bold;
+}
+@font-face {
+    font-family: 'CooperHewitt-Light';
+    src: url('fonts/CooperHewitt-Light.woff') format('woff');
+}
+@font-face {
+    font-family: 'CooperHewitt-Medium';
+    src: url('fonts/CooperHewitt-Medium.woff') format('woff');
+    font-style: bold;
+}
+@font-face {
+    font-family: 'CooperHewitt-Semibold';
+    src: url('fonts/CooperHewitt-Semibold.woff') format('woff');
+    font-style: bold;
+}
+@font-face {
+    font-family: 'CooperHewitt-Thin';
+    src: url('fonts/CooperHewitt-Thin.woff') format('woff');
+}
+#content {
+	position:relative;
+	margin:auto;
+	padding:10px;
+	max-width: 1000px;
+	background: #454545;
+	border: #797979 1px solid;
+	color:#fff;
 
-{% block content %}
-<h2>Graphs</h2>
-<ul style="font:CooperHewitt-Thin">
-    <li><a href="{{url_for('.scatterplot')}}">ScatterPlot</a></li>
-    <li><a href="{{url_for('.streamgraph')}}">StreamGraph</a></li>
-    <li><a href="{{url_for('.streamgraphcount')}}">StreamGraph Count</a></li>
-    <li>Metros
-        <ul>
-        {% for l in locations %}
-            <li><a href="{{url_for('.streamgraphmetro', metro_id=l.id)}}">{{l.name}}</a></li>
-        {% endfor %}
-        </ul>
-    </li>
-</ul>
-<h2>3d</h2>
-<ul>
-    <li><a href="{{url_for('.circles')}}">Circles</a></li>
-</ul>
-<h2>Maps</h2>
-<ul>
-    <li><a href="{{url_for('.map')}}">Map (zoom and click around)</a></li>
-    <li><a href="{{url_for('.mapanimated')}}">Animated Zoom</a></li>
-    <li>Metros
-        <ul>
-        {% for l in locations %}
-            <li><a href="{{url_for('.mapmetrosightings', metro_id=l.id)}}">{{l.name}}</a></li>
-        {% endfor %}
-        </ul>
-    </li>
-</ul>
-{% endblock %}
+
+}
+h1{
+	font-family: CooperHewitt-Thin;
+	font-weight:normal;
+	font-size: 4em;
+}
+p{
+	font-family: CooperHewitt-Book;
+	font-weight: normal;
+	font-size: 1em;
+}
+.title-callout {
+	color:#e53e22;
+	font-family: CooperHewitt-Medium;
+}
+.callout {
+	font-family: CooperHewitt-Bold;
+	color: #fff;
+}
+a {
+	color: #e53e22;
+}
+a:active {
+
+}
+a:hover {
+	color: #ff4343;
+
+}
+
+
+</style>
+	</head>
+	<body><div id="content">
+<h1>Paint the Town <span class="title-callout">Red</span></h1>
+<p>Over <span class="callout">10,000 DoStuff app users</span> volunteered their data so that we could see how long they were spending at clubs and venues over the course of one evening. We <a href="#">saw a lot</a> of movement over the 15 cities in a short amount of time. Of interest were how long people were spending in specific areas. </p>
+
+</div>
+	</body>
+	</html>

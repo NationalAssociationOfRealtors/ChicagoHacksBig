@@ -123,7 +123,6 @@ class MapHeatmapMetroView(MethodView):
         q = "SELECT COUNT(visits) as visits FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' GROUP BY metro_title,lat,lng,time(15m)"
         res = g.INFLUX.query(q)
         data = []
-        logging.info(res.raw)
         for i in res.raw['series']:
             data.append({
                 'values':i['values'],

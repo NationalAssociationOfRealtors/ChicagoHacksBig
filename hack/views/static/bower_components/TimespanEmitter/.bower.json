@@ -24,11 +24,11 @@
     "test",
     "tests"
   ],
-  "_release": "3a2afa4a0d",
+  "_release": "9375315ead",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "3a2afa4a0d393f74f146fda2e7f764d11c2e4e47"
+    "commit": "9375315ead56a9b950a772141e646caa2059c1fd"
   },
   "_source": "git://github.com/NationalAssociationOfRealtors/TimespanEmitter.git",
   "_target": "*",

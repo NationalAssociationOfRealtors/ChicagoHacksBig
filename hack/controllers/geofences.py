@@ -159,6 +159,26 @@ class MapSightingsMetroView(MethodView):
             })
         return render_template("geofence/mapmetrosightings.html", data=json.dumps(data), metro_id=metro_id, locations=json.dumps(locations))
 
+class MapSightingsMultipleMetroView(MethodView):
+
+    def get(self, metro_ids):
+        ids = metro_ids.split(",")
+        metros = {}
+        for id in ids:
+            q = "SELECT lat, lng, dwell_time, place_id FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' and metro_id='{}'".format(id)
+            res = g.INFLUX.query(q)
+            metros['metro_{}'.format(id)] = {'id':id, 'data':[]}
+            for i in res.get_points():
+                metros['metro_{}'.format(id)]['data'].append({
+                    'dwell_time':i['dwell_time'],
+                    'lat':i['lat'],
+                    'lng':i['lng'],
+                    'time':i['time'],
+                    'place_id':i['place_id']
+                })
+        return render_template("geofence/multiplemaps.html", data=json.dumps(metros), locations=json.dumps(locations))
+
+
 class Circles(MethodView):
 
     def get(self):
@@ -171,6 +191,7 @@ geofence.add_url_rule("/streamgraphcount", view_func=StreamGraphCount.as_view('s
 geofence.add_url_rule("/streamgraphmetro/<metro_id>", view_func=StreamGraphMetro.as_view('streamgraphmetro'))
 geofence.add_url_rule("/map", view_func=MapView.as_view('map'))
 geofence.add_url_rule("/map/<metro_id>/sightings", view_func=MapSightingsMetroView.as_view('mapmetrosightings'))
+geofence.add_url_rule("/map/multiple/<metro_ids>/sightings", view_func=MapSightingsMultipleMetroView.as_view('mapmulitplemetrosightings'))
 geofence.add_url_rule("/map/<metro_id>", view_func=MapHeatmapMetroView.as_view('mapmetro'))
 geofence.add_url_rule("/mapanimated", view_func=MapHeatmapAnimatedView.as_view('mapanimated'))
 geofence.add_url_rule("/circles", view_func=Circles.as_view('circles'))

@@ -18,10 +18,10 @@
     var proto = TimespanEmitter.prototype;
     var exports = this;
 
-    proto.addListener = function(evt, callback){
+    proto.addListener = function(evt, callback, scope){
         var events = this._getEvents();
         var listeners = events[evt] || (events[evt]=[]);
-        listeners.push({callback:callback});
+        listeners.push({callback:callback, scope:scope});
         return this;
     };
 
@@ -36,16 +36,16 @@
             var add = this.start_time+(this.counter*this.step_increment);
             var current = new Date(add);
             for(var i in this._getEvents()['timer']){
-                var cb = this._getEvents()['timer'][i]
-                cb.callback.apply(this, [current]);
+                var cb = this._getEvents()['timer'][i];
+                cb.callback.apply(cb.scope, [current]);
             }
             this.counter++;
             this.last = timestamp;
         }else if(this.counter >= this.num_steps && this.loop){
             this.counter = 0;
             for(var i in this._getEvents()['looped']){
-                var cb = this._getEvents()['looped'][i]
-                cb.callback.apply(this, []);
+                var cb = this._getEvents()['looped'][i];
+                cb.callback.apply(cb.scope, []);
             }
         }
     };

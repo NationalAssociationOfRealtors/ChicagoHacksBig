@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block style %}
+    #maps{
+        margin-top: 50px;
+    }
+    .map{
+        border: 2px solid #FFFFFF;
+    }
+{% endblock %}
+
+{% block container %}
+<div class="continer-fluid" id="maps">
+    <div class="row" id="map_row"></div>
+</div>
+<script>
+    var data = {{data|safe}};
+    var locations = {{locations|safe}};
+    //Tiles
+    var carto_light = 'http://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+    var carto_dark = "http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png";
+    var osm = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png';
+    var toner = 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png';
+    var bw = "http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png";
+    var toner_lite = "http://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png";
+    var water_color = "http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.png";
+    var stamen_terrain = "http://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.png";
+    var esri = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}";
+    var esri_imagery = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+    var osm_hydda = "http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png";
+
+    function get_location(id){
+        for(var l in locations){
+            if(locations[l].id == id) return locations[l]
+        }
+    }
+
+    var cfg = {
+        // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+        // if scaleRadius is false it will be the constant radius used in pixels
+        "radius": 50,
+        "maxOpacity": .5,
+        // scales the radius based on map zoom
+        "scaleRadius": false,
+        // if set to false the heatmap uses the global maximum for colorization
+        // if activated: uses the data maximum within the current map boundaries
+        //   (there will always be a red spot with useLocalExtremas true)
+        "useLocalExtrema": true,
+        // which field name in your data represents the latitude - default "lat"
+        latField: 'lat',
+        // which field name in your data represents the longitude - default "lng"
+        lngField: 'lng',
+        // which field name in your data represents the data value - default "value"
+        valueField: 'count'
+    };
+
+    var Timestamp = L.Control.extend({
+        options: {
+            position: 'bottomright',
+            id: 'timestamp',
+            //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
+        },
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            container.id = this.options.id;
+            container.style.backgroundColor = 'white';
+            container.style.width = '260px';
+            container.style.height = '30px';
+            container.style.padding = '7px';
+            return container;
+        }
+    });
+
+    var te = new TimespanEmitter(
+        new Date('2016-02-18T22:00:00Z'),
+        new Date('2016-02-19T12:00:00Z'),
+        60000,
+        1000,
+        true
+    );
+    for(var i in data){
+        var d = data[i];
+        $("#map_row").append("<div class='col-sm-6 map' id='map"+d.id+"'></div>");
+        $('#map'+d.id).height(($(window).height()-55)/2);
+        var loc = get_location(d.id);
+        var am = new AnimatedMap(loc, d.data, 'map'+d.id, carto_light, JSON.parse(JSON.stringify(cfg)));
+        te.addListener('timer', am.timer, am);
+        te.addListener('looped', am.looped, am);
+    }
+    te.start();
+</script>
+{% endblock %}

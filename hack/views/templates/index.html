@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h2>Groups</h2>
+<ul>
+    <li><a href="{{url_for('.mapmulitplemetrosightings', metro_ids='3,1,30,19')}}">Portland, LA, Austin and Chicago</a></li>
+</ul>
 <h2>Graphs</h2>
 <ul>
     <li><a href="{{url_for('.scatterplot')}}">ScatterPlot</a></li>

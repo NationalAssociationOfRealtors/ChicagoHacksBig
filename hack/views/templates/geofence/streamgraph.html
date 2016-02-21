@@ -13,6 +13,7 @@
 {% endblock %}
 
 {% block content %}
+<h2>{{name}}</h2>
 <div id="chart"><svg></svg></div>
 <script>
     var data = {{data|safe}};

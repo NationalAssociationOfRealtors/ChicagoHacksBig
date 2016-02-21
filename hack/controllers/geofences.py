@@ -32,6 +32,15 @@ locations = [
     {'id':9, 'name':'Victoria, BC, CA', 'coords':[48.428130, -123.363824]},
 ];
 
+def get_location(id):
+    for l in locations:
+        if l['id'] == id: return l
+
+class Index(MethodView):
+
+    def get(self):
+        return render_template("index.html", locations=locations)
+
 class ScatterPlot(MethodView):
     def get(self):
         q = "SELECT MEAN(dwell_time) as mean FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' GROUP BY metro_title,time(1h) fill(0)"
@@ -77,6 +86,7 @@ class StreamGraphCount(MethodView):
 class StreamGraphMetro(MethodView):
     def get(self, metro_id):
         logging.info(metro_id)
+        location = get_location(int(metro_id))
         q = "SELECT COUNT(visits) as mean FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' and metro_id = '{}' GROUP BY place_name,time(15m) fill(0)".format(metro_id)
         res = g.INFLUX.query(q)
         data = []
@@ -87,7 +97,7 @@ class StreamGraphMetro(MethodView):
                 'size':20,
                 'shape':'circle',
             } for p in i[1]]})
-        return render_template("geofence/map.html", data=json.dumps(data))
+        return render_template("geofence/streamgraph.html", data=json.dumps(data), name=location['name'])
 
 class MapView(MethodView):
 
@@ -132,6 +142,7 @@ class MapHeatmapMetroView(MethodView):
         return render_template("geofence/mapmetro.html", data=json.dumps(data), metro_id=metro_id, locations=json.dumps(locations))
 
 
+geofence.add_url_rule("/", view_func=Index.as_view('index'))
 geofence.add_url_rule("/scatterplot", view_func=ScatterPlot.as_view('scatterplot'))
 geofence.add_url_rule("/streamgraph", view_func=StreamGraph.as_view('streamgraph'))
 geofence.add_url_rule("/streamgraphcount", view_func=StreamGraphCount.as_view('streamgraphcount'))

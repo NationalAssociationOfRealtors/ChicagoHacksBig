@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Graphs</h2>
+<ul>
+    <li><a href="{{url_for('.scatterplot')}}">ScatterPlot</a></li>
+    <li><a href="{{url_for('.streamgraph')}}">StreamGraph</a></li>
+    <li><a href="{{url_for('.streamgraphcount')}}">StreamGraph Count</a></li>
+    <li>Metros
+        <ul>
+        {% for l in locations %}
+            <li><a href="{{url_for('.streamgraphmetro', metro_id=l.id)}}">{{l.name}}</a></li>
+        {% endfor %}
+        </ul>
+    </li>
+</ul>
+<h2>Maps</h2>
+<ul>
+    <li><a href="{{url_for('.map')}}">Map (zoom and click around)</a></li>
+    <li><a href="{{url_for('.mapanimated')}}">Animated Zoom</a></li>
+    <li>Metros
+        <ul>
+        {% for l in locations %}
+            <li><a href="{{url_for('.mapmetro', metro_id=l.id)}}">{{l.name}}</a></li>
+        {% endfor %}
+        </ul>
+    </li>
+</ul>
+{% endblock %}

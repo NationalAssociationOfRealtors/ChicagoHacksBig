@@ -77,10 +77,11 @@
         1000,
         true
     );
+    var div = Object.keys(data).length/2;
     for(var i in data){
         var d = data[i];
         $("#map_row").append("<div class='col-sm-6 map' id='map"+d.id+"'></div>");
-        $('#map'+d.id).height(($(window).height()-55)/2);
+        $('#map'+d.id).height(($(window).height()-55)/div);
         var loc = get_location(d.id);
         var am = new AnimatedMap(loc, d.data, 'map'+d.id, carto_light, JSON.parse(JSON.stringify(cfg)));
         te.addListener('timer', am.timer, am);

@@ -66,10 +66,26 @@ class StreamGraphMetro(MethodView):
                 'size':20,
                 'shape':'circle',
             } for p in i[1]]})
-        return render_template("geofence/streamgraph.html", data=json.dumps(data))
+        return render_template("geofence/map.html", data=json.dumps(data))
+
+class MapView(MethodView):
+
+    def get(self):
+        q = "SELECT COUNT(visits) as visits, lat, lng, place_name FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' GROUP BY metro_title"
+        res = g.INFLUX.query(q)
+        data = []
+        for i in res.raw['series']:
+            logging.info(i['values'][0][1])
+            data.append({
+                'count':i['values'][0][1],
+                'lat':i['tags']['lat'],
+                'lng':i['tags']['lng'],
+            })
+        return render_template("geofence/map.html", data=json.dumps(data))
 
 
 geofence.add_url_rule("/scatterplot", view_func=ScatterPlot.as_view('scatterplot'))
 geofence.add_url_rule("/streamgraph", view_func=StreamGraph.as_view('streamgraph'))
 geofence.add_url_rule("/streamgraphcount", view_func=StreamGraphCount.as_view('streamgraphcount'))
 geofence.add_url_rule("/streamgraphmetro/<metro_id>", view_func=StreamGraphMetro.as_view('streamgraphmetro'))
+geofence.add_url_rule("/map", view_func=MapView.as_view('map'))

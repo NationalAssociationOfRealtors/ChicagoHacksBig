@@ -9,15 +9,31 @@
 <div 'id'="map"></div>
 <script>
     $('#map').height($(window).height()-50);
-    var heatmap_data = {
-        max: 100,
-        data: {{data|safe}}
-    }
+    var data = {{data|safe}};
+    var locations = {{locations|safe}};
+    var current_location = 0;
+
+    var Timestamp = L.Control.extend({
+        options: {
+            position: 'bottomright'
+            //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
+        },
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            container.'id' = "timestamp";
+            container.style.backgroundColor = 'white';
+            container.style.w'id'th = '260px';
+            container.style.height = '30px';
+            container.style.padding = '7px';
+            return container;
+        }
+
+    });
     var cfg = {
         // radius should be small ONLY if scaleRadius is true (or small radius is intended)
         // if scaleRadius is false it will be the constant radius used in pixels
         "radius": 50,
-        "maxOpacity": .8,
+        "maxOpacity": .5,
         // scales the radius based on map zoom
         "scaleRadius": false,
         // if set to false the heatmap uses the global maximum for colorization
@@ -49,9 +65,46 @@
     var map = new L.map('map', {
         layers: [tiles],
         center: new L.LatLng(41.888714, -87.636087),
-        zoom: 5,
+        zoom: 12,
     });
+    map.addControl(new Timestamp());
     heatmapLayer.addTo(map);
-	heatmapLayer.setData(heatmap_data);
+    goto_location();
+    var index = 0;
+    setInterval(function(){
+        var d = [];
+        $('#timestamp').html(new Date(data[0].values[index][0]));
+        for(var i in data){
+            var p = data[i];
+            if(p.values[index][1] !== 0){
+                d.push({
+                    lat:p.lat,
+                    lng:p.lng,
+                    count: p.values[index][1],
+                });
+            }
+        }
+        index++;
+        heatmapLayer.setData({max:30, data:d});
+        if(index == data[0].values.length){
+            index = 0;
+            goto_location();
+        }
+    }, 100);
+
+    function goto_location(){
+        console.log(locations);
+        map.panTo(new L.LatLng(
+            locations[current_location].coords[0],
+            locations[current_location].coords[1]
+        ), {
+            animate:true,
+            duration: 1,
+        })
+        current_location++;
+        if(current_location >= locations.length){
+            current_location = 0;
+        }
+    }
 </script>
 {% endblock %}

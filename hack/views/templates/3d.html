@@ -36,7 +36,6 @@ canvas { width: 100%; height: 100% }
                 }
             }
         }
-        console.log(data);
         var container;
         var camera, controls, scene, renderer, raycaster, mouse, INTERSECTED;
         var all_lines = [];
@@ -110,7 +109,6 @@ canvas { width: 100%; height: 100% }
                     )
                 )
                 var li = new THREE.Line(l, material2);
-                console.log(vens[i]);
                 li.userData = vens[i];
                 group.add(li);
                 lines.push(l);

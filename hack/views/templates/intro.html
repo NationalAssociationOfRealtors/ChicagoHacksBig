@@ -3,13 +3,15 @@
 {% block style %}
 body{
 	background: #232323;
-	/*background-image: url("/static/img/bgimage.jpeg");*/
+	background-image: url("/static/img/bgimage.jpeg");
     background-repeat: no-repeat;
 }
 
 #info {
 	padding:10px;
 	color:#fff;
+	background: #232323;
+	opacity: .75;
 }
 
  #nav{
@@ -150,6 +152,14 @@ a:hover {
 #test{
 	height: 1000px;
 }
+
+h4.special{
+	margin-top: 35px;
+	border-bottom: 4px solid #FFFFFF;
+	padding-bottom: 10px;
+	margin-bottom: 15px;
+}
+
 {% endblock %}
 {% block container %}
 <section>
@@ -165,15 +175,38 @@ a:hover {
 				<p>We created 4,500+ geofences around live music venues in 16 U.S. cities. We captured visit data to these geofences during the evening of February 18th and the morning of February 19th, 2016 in collaboration with DoStuff, whose app had 10,000+ users share location data.</p>
 				<p>We published 13,000+ geofence visits using Gimbal (the SDK inside DoStuff's app) and we are visualizing live music attendees' real-life data using D3, Bootstrap, Gimbal SDKs, Heatmap.js, InfluxDB, JQuery, Leaflet, NVD3, Python and THREEJS.</p>
 				<p><span class="callout">Our Promise:</span>  ChicagoHacksBig will donate 100% of all prize money to Smart Chicago, who helps Chicago Youth learn tech skills as a mission-driven non-profit. (<a href="https://twitter.com/hashtag/chihacksbig" target="_blank">#chihacksbig</a> on Twitter for more)</p>
+
+				<h4 class='special'>Visualizations</h4>
+				<ul id="tabs" class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#compare" aria-controls="compare" role="tab" data-toggle="tab">Compare</a></li>
+					<li role="presentation"><a href="#national" aria-controls="national" role="tab" data-toggle="tab">National</a></li>
+					<li role="presentation"><a href="#metro" aria-controls="metro" role="tab" data-toggle="tab">Metro</a></li>
+				</ul>
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane fade in active" id="compare">
+						<ul class="list-group">
+							<li class="list-group-item"><a href="{{url_for('.mapmulitplemetrosightings', metro_ids='3,1,30,19')}}">Portland, LA, Austin and Chicago</a></li>
+						</ul>
+					</div>
+					<div role="tabpanel" class="tab-pane fade" id="national">
+						<ul class="list-group">
+							<li class="list-group-item"><a href="{{url_for('.circles')}}">3D</a></li>
+							<li class="list-group-item"><a href="{{url_for('.map')}}">Map (zoom and click around)</a></li>
+						</ul>
+					</div>
+					<div role="tabpanel" class="tab-pane fade" id="metro">
+						{% for l in locs %}
+							<li class="list-group-item"><a href="{{url_for('.streamgraphmetro', metro_id=l.id)}}">{{l.name}}</a></li>
+						{% endfor %}
+					</div>
+				</div>
+				<script>
+				$('#tabs a').click(function (e) {
+					e.preventDefault()
+					$(this).tab('show')
+				});
+				</script>
 			</div>
-		</div>
-	</div>
-</section>
-<div class="parallax-container" data-parallax="scroll" data-position="top" data-bleed="0" data-image-src="/static/img/bgimage.jpeg" data-natural-width="1400" data-natural-height="900" style="height: 300px;"></div>
-<section>
-	<div class="container-fluid" id="test">
-		<div class="embed-responsive embed-responsive-16by9">
-  			<iframe class="embed-responsive-item" src="{{url_for('.mapmulitplemetrosightings_no', metro_ids='3,1,30,19')}}"></iframe>
 		</div>
 	</div>
 </section>

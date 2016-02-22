@@ -3,14 +3,12 @@
 {% block style %}
 body{
 	background: #232323;
-	background-image: url("/static/img/bgimage.jpeg");
+	/*background-image: url("/static/img/bgimage.jpeg");*/
     background-repeat: no-repeat;
 }
 
 #info {
 	padding:10px;
-	background: rgba(40,40,40,0.85);
-	border: #797979 1px solid;
 	color:#fff;
 }
 
@@ -148,24 +146,38 @@ a:hover {
 #why a{
 		color: #f48f00;
 }
+
+#test{
+	height: 1000px;
+}
 {% endblock %}
 {% block container %}
-<div class="container" id="main_container">
-	<div class="row">
-		<div id="info">
-			<div id="header">
-				<div id="logo">
-					<h1>Chicago<span class="title-callout">Hacks</span>Big</h1>
+<section>
+	<div class="container" id="main_container">
+		<div class="row">
+			<div id="info">
+				<div id="header">
+					<div id="logo">
+						<h1>Chicago<span class="title-callout">Hacks</span>Big</h1>
+					</div>
+					<div id="why">
+						<a href="#">Why Are We Doing This?</a>
+					</div>
 				</div>
-				<div id="why">
-					<a href="#">Why Are We Doing This?</a>
-				</div>
+				<div style="clear:both;"></div>
+				<p>We created 4,500+ geofences around live music venues in 16 U.S. cities. We captured visit data to these geofences during the evening of February 18th and the morning of February 19th, 2016 in collaboration with DoStuff, whose app had 10,000+ users share location data.</p>
+				<p>We published 13,000+ geofence visits using Gimbal (the SDK inside DoStuff's app) and we are visualizing live music attendees' real-life data using D3, Bootstrap, Gimbal SDKs, Heatmap.js, InfluxDB, JQuery, Leaflet, NVD3, Python and THREEJS.</p>
+				<p><span class="callout">Our Promise:</span>  ChicagoHacksBig will donate 100% of all prize money to Smart Chicago, who helps Chicago Youth learn tech skills as a mission-driven non-profit. (<a href="https://twitter.com/hashtag/chihacksbig" target="_blank">#chihacksbig</a> on Twitter for more)</p>
 			</div>
-			<div style="clear:both;"></div>
-			<p>We created 4,500+ geofences around live music venues in 16 U.S. cities. We captured visit data to these geofences during the evening of February 18th and the morning of February 19th, 2016 in collaboration with DoStuff, whose app had 10,000+ users share location data.</p>
-			<p>We published 13,000+ geofence visits using Gimbal (the SDK inside DoStuff's app) and we are visualizing live music attendees' real-life data using D3, Bootstrap, Gimbal SDKs, Heatmap.js, InfluxDB, JQuery, Leaflet, NVD3, Python and THREEJS.</p>
-			<p><span class="callout">Our Promise:</span>  ChicagoHacksBig will donate 100% of all prize money to Smart Chicago, who helps Chicago Youth learn tech skills as a mission-driven non-profit. (<a href="https://twitter.com/hashtag/chihacksbig" target="_blank">#chihacksbig</a> on Twitter for more)</p>
 		</div>
 	</div>
-</div>
+</section>
+<div class="parallax-container" data-parallax="scroll" data-position="top" data-bleed="0" data-image-src="/static/img/bgimage.jpeg" data-natural-width="1400" data-natural-height="900" style="height: 300px;"></div>
+<section>
+	<div class="container-fluid" id="test">
+		<div class="embed-responsive embed-responsive-16by9">
+  			<iframe class="embed-responsive-item" src="{{url_for('.mapmulitplemetrosightings_no', metro_ids='3,1,30,19')}}"></iframe>
+		</div>
+	</div>
+</section>
 {% endblock %}

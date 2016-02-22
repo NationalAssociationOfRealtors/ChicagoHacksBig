@@ -1,40 +1,69 @@
 {% extends 'base.html' %}
 
-{% block styles %}
+{% block style %}
 canvas { width: 100%; height: 100% }
+#timestamp {
+    position: absolute;
+    bottom: 20px;
+    right: 50px;
+    height: 45px;
+    padding: 7px;
+}
 {% endblock %}
 
 {% block container %}
     <script src="/static/bower_components/three.js/build/three.min.js"></script>
     <script src="/static/bower_components/three.js/examples/js/controls/OrbitControls.js"></script>
     <script>
-
-        var container
+        var data = {{data|safe}};
+        for(var i in data){
+            var metro = data[i];
+            for(var v in metro){
+                var venue = metro[v];
+                for(t in venue){
+                    var count = venue[t];
+                    count.time = new Date(count.time).getTime();
+                }
+            }
+        }
+        console.log(data);
+        var container;
         var camera, controls, scene, renderer;
         var group = new THREE.Object3D();
 
-        var rooms = [
-            {name:'Entry', count:20, radius:25, color:0xFF0000},
-            {name:'Kitchen', count:50, radius:50, color:0x00FF33},
-            {name:'Reserved', count:100, radius:75, color:0xFFFF00},
-            {name:'Common', count:100, radius:100, color: 0xFF11CC},
-            {name:'Auditorium', count:300, radius:125, color: 0xFF3344},
-        ];
+        var metros = []
+        var start_radius = 20;
+        var spacing = 13;
+        var counter = 0;
+        var colors = d3.scale.category20().range();
+        for(var m in data){
+            var met = data[m];
+            var c = Object.keys(met).length;
+            if(c > 20){
+                metros.push({
+                    id:m,
+                    count:Object.keys(met).length,
+                    radius:start_radius+(counter*spacing),
+                    color:colors[counter],
+                })
+                counter++;
+            }
+        }
 
         init();
 
         function build(count, radius, color){
-            var people = [];
+            var venues = [];
             var lines = [];
             for(var i=0; i<count; i++){
-                people.push(Math.random()*10);
+                venues.push(1);
             }
             var group = new THREE.Object3D();
             var geometry = new THREE.Geometry();
-            var material = new THREE.LineBasicMaterial({ color: 0x999999, linewidth: 2 });
-            var material2 = new THREE.LineBasicMaterial({ color: color, linewidth: 1 });
+            var material = new THREE.LineBasicMaterial({ color: 0x444444, linewidth: 1 });
+            var material2 = new THREE.LineBasicMaterial({ color: color, linewidth: 3 });
 
-            for (var i = 0; i <= count; i++) {
+            for (var i = 0; i <= venues.length; i++) {
                 var theta = (i / count) * Math.PI * 2;
                 geometry.vertices.push(
                     new THREE.Vector3(
@@ -48,7 +77,7 @@ canvas { width: 100%; height: 100% }
             var circ = new THREE.Line(geometry, material)
             group.add(circ)
 
-            for (var i = 0; i <= people.length; i++) {
+            for (var i = 0; i <= venues.length; i++) {
                 var theta = (i / count) * Math.PI * 2;
                 var l = new THREE.Geometry();
                 l.vertices.push(
@@ -60,26 +89,29 @@ canvas { width: 100%; height: 100% }
                     new THREE.Vector3(
                         Math.cos(theta) * radius,
                         Math.sin(theta) * radius,
-                        people[i]
+                        venues[i]
                     )
                 )
                 group.add(new THREE.Line(l, material2));
                 lines.push(l);
             }
-            return {lines:lines, people:people, group:group};
+            return {lines:lines, venues:venues, group:group};
         }
 
         function init(){
             container = document.createElement( 'div' );
+            var timestamp = document.createElement('div');
+            timestamp.id = 'timestamp';
             document.body.appendChild( container );
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000 );
-            camera.position.set(0, -200,  100);
+            camera.position.set(0, -200,  30);
             camera.lookAt( scene.position );
 
-            for(var i in rooms){
-                rooms[i].data = build(rooms[i].count, rooms[i].radius, rooms[i].color);
-                group.add(rooms[i].data.group);
+            for(var i in metros){
+                var m = metros[i];
+                m.data = build(m.count, m.radius, m.color);
+                group.add(m.data.group);
             }
 
             scene.add(group);
@@ -90,28 +122,57 @@ canvas { width: 100%; height: 100% }
             renderer.setSize( window.innerWidth, window.innerHeight );
             controls = new THREE.OrbitControls( camera, renderer.domElement );
             container.appendChild( renderer.domElement );
-
-            animate();
+            container.appendChild( timestamp );
+            update_controls();
         }
 
-        var rotation = 0;
-        function animate() {
-            requestAnimationFrame(animate);
+        function update_controls(){
+            requestAnimationFrame(update_controls);
             controls.update();
-            for(var r in rooms){
-                for(var i=0; i<rooms[r].data.lines.length; i++){
-                    var m = Math.round(Math.random()) ? -.3 : .3;
-                    rooms[r].data.lines[i].vertices[1].z+=m;
-                    rooms[r].data.lines[i].verticesNeedUpdate = true;
-                }
-            }
-
             group.rotation.z+=.002;
             render();
+        }
+
+        var te = new TimespanEmitter(
+            new Date('2016-02-18T22:00:00Z'),
+            new Date('2016-02-19T12:00:00Z'),
+            60000,
+            1000,
+            true
+        );
+
+        te.addListener('timer', animate);
+
+        function animate(timestamp){
+            $("#timestamp").html(timestamp);
+            var now = timestamp.getTime();
+            var metro_count = 0;
+            for(var i in data){
+                var metro = data[i];
+                var venue_count=0;
+                var c = Object.keys(metro).length;
+                if(c > 20){
+                    for(var v in metro){
+                        var venue = metro[v];
+                        for(var t in venue){
+                            var count = venue[t];
+                            if(count.time == now){
+                                metros[metro_count].data.lines[venue_count].vertices[1].z=(count.visits+1);
+                                metros[metro_count].data.lines[venue_count].verticesNeedUpdate = true;
+                            }
+                        }
+                        venue_count++;
+                    }
+                    metro_count++;
+                }
+            }
         }
 
         function render(){
             renderer.render( scene, camera );
         }
+
+        te.start();
+
     </script>
 {% endblock %}

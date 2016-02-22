@@ -182,7 +182,16 @@ class MapSightingsMultipleMetroView(MethodView):
 class Circles(MethodView):
 
     def get(self):
-        return render_template('3d.html')
+        q = "SELECT COUNT(visits) as visits, MEAN(dwell_time) as dwell_time FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' GROUP BY metro_id,place_name,time(15m) fill(0)"
+        res = g.INFLUX.query(q)
+        data = {}
+        for i in res.items():
+            metro = data.setdefault("metro_{}".format(i[0][1]['metro_id']), {})
+            place = metro.setdefault(i[0][1]['place_name'], [])
+            for p in i[1]:
+                place.append(p)
+
+        return render_template('3d.html', data=json.dumps(data))
 
 geofence.add_url_rule("/", view_func=Index.as_view('index'))
 geofence.add_url_rule("/scatterplot", view_func=ScatterPlot.as_view('scatterplot'))

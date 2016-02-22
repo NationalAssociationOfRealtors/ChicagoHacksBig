@@ -49,30 +49,19 @@ body{
 	margin:auto;
 	padding:10px;
 	max-width: 1000px;
-	background: rgba(40,40,40,0.85)
-;
+	background: rgba(40,40,40,0.85);
 	border: #797979 1px solid;
 	color:#fff;
-
-
-}
-#why {
-	float:right;
-	font-family: CooperHewitt-Thin;
-	text-transform: uppercase;
-	font-size: 1em;
 }
 
-#why a{
-		color: #f48f00;
-}
+
+
+/*Navigation elements*/
 
  #nav{
  	width: 800px;
     height: 35px;
     font-size: 16px;
-    font-family: CooperHewitt-Thin;
-    font-weight: normal;
     text-align: center;
     background-color: #e53e22;
     border-radius: 8px;
@@ -91,6 +80,8 @@ body{
 	text-transform: uppercase; 
  }
  #nav li a{
+ 	font-family: CooperHewitt-Thin;
+    font-weight: normal;
  	color: #fff;
  }
  #nav li a:hover {
@@ -100,6 +91,9 @@ body{
  	font-family: CooperHewitt-Medium;
  	font-weight: bold;
  }
+
+ /** Headers **/
+
 h1{
 	font-family: CooperHewitt-Medium;
 	font-weight:normal;
@@ -111,19 +105,58 @@ h1{
 }
 h2{
 	font-style: uppercase;
-	font-family: CooperHewitt-Thin;
+	font-family: CooperHewitt-Medium;
 	font-weight: normal;
 	font-size: 4em;
 	line-height: 1em;
 	margin:0;
 }
+h3{
+	font-style: uppercase;
+	font-family: CooperHewitt-Medium;
+	font-weight: normal;
+	font-size: 3em;
+	line-height: 1em;
+	margin:0;
+}
+h4{
+	font-style: uppercase;
+	font-family: CooperHewitt-Medium;
+	font-weight: normal;
+	font-size: 2.25em;
+	line-height: 1em;
+	margin:0;
+}
+h5{
+	font-style: uppercase;
+	font-family: CooperHewitt-Semibold;
+	font-weight: normal;
+	font-size: 1.5em;
+	line-height: 1em;
+	margin:0;
+}
+h6{
+	font-style: uppercase;
+	font-family: CooperHewitt-Heavy;
+	font-weight: normal;
+	font-size: 1em;
+	line-height: 1em;
+	margin:0;
+}
+
+/* Text elements & specials */
 p{
 	font-family: CooperHewitt-Book;
 	font-weight: normal;
 	font-size: 1em;
 }
+
+li{
+	padding-left: 2px;
+	font-family: CooperHewitt-Medium;
+}
 .title-callout {
-	color:#e53e22;
+	color:#aaa;
 	font-family: CooperHewitt-Medium;
 }
 .callout {
@@ -133,14 +166,22 @@ p{
 a {
 	color: #e53e22;
 }
-a:active {
 
-}
 a:hover {
 	color: #ff4343;
 
 }
 
+#why {
+	float:right;
+	font-family: CooperHewitt-Thin;
+	text-transform: uppercase;
+	font-size: 1em;
+}
+
+#why a{
+		color: #f48f00;
+}
 
 </style>
 	</head>
@@ -152,9 +193,13 @@ a:hover {
 			<li><a href="#">How Many?</a></li>
 		</ul>
 	</div><div id="why"><a href="#">Why Are We Doing This?</a></div>
-	<h1>Chicago Hacks Big</h1>
-<h2>Paint the Town <span class="title-callout">Red</span></h2>
-<p>Over <span class="callout">10,000 DoStuff app users</span> volunteered their data so that we could see how long they were spending at clubs and venues over the course of one evening. We <a href="#">saw a lot</a> of movement over the 15 cities in a short amount of time. Of interest were how long people were spending in specific areas. </p>
+	<h1>Chicago<span class="title-callout">Hacks</span>Big</h1>
+
+<p>We created 4,500+ geofences around live music venues in 16 U.S. cities. We captured visit data to these geofences during the evening of February 18th and the morning of February 19th, 2016 in collaboration with DoStuff, whose app had 10,000+ users share location data.</p>
+
+<p>We published 13,000+ geofence visits using Gimbal (the SDK inside DoStuff's app) and we are visualizing live music attendees' real-life data using Atom, Bootstrap, D3, Docker, GEvent, Gimbal SDKs, Heatmap.js, InfluxDB, JQuery, Leaflet, NVD3, Python and THREEJS.</p>
+
+<p><span class="callout">Our Promise:</span>  ChicagoHacksBig will donate 100% of all prize money to Smart Chicago, who helps Chicago Youth learn tech skills as a mission-driven non-profit. (<a href="https://twitter.com/hashtag/chihacksbig" target="_blank">#chihacksbig</a> on Twitter for more)</p>
 
 </div>
 	</body>

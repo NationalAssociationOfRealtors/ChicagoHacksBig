@@ -1,209 +1,171 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Paint the Town Red</title>
-	<style>
-		body{
-			height: 100%;
-			margin:0;
-			background: #232323;
-			background-image: url("/static/img/bgimage.jpeg");
-		    background-repeat: no-repeat;
+{% extends 'base.html' %}
+{% block title %}Paint the Town Red{% endblock %}
+{% block style %}
+body{
+	background: #232323;
+	background-image: url("/static/img/bgimage.jpeg");
+    background-repeat: no-repeat;
+}
 
-		}
-		@font-face {
-		    font-family: 'CooperHewitt-Bold';
-		    src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Bold.woff') format('woff');
-		    font-style: bold;
-		}
-		@font-face {
-		    font-family: 'CooperHewitt-Book';
-		    src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Book.woff') format('woff');
-		}
-		@font-face {
-		    font-family: 'CooperHewitt-Heavy';
-		    src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Heavy.woff') format('woff');
-		    font-style: bold;
-		}
-		@font-face {
-		    font-family: 'CooperHewitt-Light';
-		    src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Light.woff') format('woff');
-		}
-		@font-face {
-		    font-family: 'CooperHewitt-Medium';
-		    src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Medium.woff') format('woff');
-		    font-style: bold;
-		}
-		@font-face {
-		    font-family: 'CooperHewitt-Semibold';
-		    src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Semibold.woff') format('woff');
-		    font-style: bold;
-		}
-		@font-face {
-		    font-family: 'CooperHewitt-Thin';
-		    src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Thin.woff') format('woff');
-		}
-		#content {
-			position:relative;
-			margin:auto;
-			padding:10px;
-			max-width: 1000px;
-			background: rgba(40,40,40,0.85);
-			border: #797979 1px solid;
-			color:#fff;
-		}
+#info {
+	padding:10px;
+	background: rgba(40,40,40,0.85);
+	border: #797979 1px solid;
+	color:#fff;
+}
 
-		 #nav{
-		 	width: 800px;
-		    height: 35px;
-		    font-size: 16px;
-		    text-align: center;
-		    background-color: #e53e22;
-		    float:left;
-		    }
+ #nav{
+ 	width: 800px;
+    height: 35px;
+    font-size: 16px;
+    text-align: center;
+    background-color: #e53e22;
+    float:left;
+    }
 
-		 #nav ul {
-		 	height: auto;
-		    padding: 8px 0px;
-		    margin: 0px;
-		 }
+ #nav ul {
+ 	height: auto;
+    padding: 8px 0px;
+    margin: 0px;
+ }
 
-		 #nav li{
-		 	display: inline;
-			padding: 20px;
-			text-transform: uppercase;
-		 }
-		 #nav li a{
-		 	font-family: CooperHewitt-Thin;
-		    font-weight: normal;
-		 	color: #fff;
-		 }
-		 #nav li a:hover {
-		 	text-decoration:none;
-		 }
-		 #nav li a:active{
-		 	font-family: CooperHewitt-Medium;
-		 	font-weight: bold;
-		 }
-		 .section-callout{
-		 	width: 780px;
-		    font-size: 16px;
-		    background-color: #1888d7;
-		    padding:10px;
-		    font-family: CooperHewitt-Thin;
-		    margin:0px;
-		    }
-		 /** Headers **/
+ #nav li{
+ 	display: inline;
+	padding: 20px;
+	text-transform: uppercase;
+ }
+ #nav li a{
+ 	font-family: CooperHewitt-Thin;
+    font-weight: normal;
+ 	color: #fff;
+ }
+ #nav li a:hover {
+ 	text-decoration:none;
+ }
+ #nav li a:active{
+ 	font-family: CooperHewitt-Medium;
+ 	font-weight: bold;
+ }
+ .section-callout{
+ 	width: 780px;
+    font-size: 16px;
+    background-color: #1888d7;
+    padding:10px;
+    font-family: CooperHewitt-Thin;
+    margin:0px;
+    }
+ /** Headers **/
 
-		h1{
-			font-family: CooperHewitt-Medium;
-			font-weight:normal;
-			font-size: 5em;
-			text-transform: uppercase;
-			line-height: 1em;
-			margin-top:10px;
-			margin-bottom: 10px;
-		}
-		h2{
-			font-style: uppercase;
-			font-family: CooperHewitt-Medium;
-			font-weight: normal;
-			font-size: 4em;
-			line-height: 1em;
-			margin:0;
-		}
-		h3{
-			font-style: uppercase;
-			font-family: CooperHewitt-Medium;
-			font-weight: normal;
-			font-size: 3em;
-			line-height: 1em;
-			margin:0;
-		}
-		h4{
-			font-style: uppercase;
-			font-family: CooperHewitt-Medium;
-			font-weight: normal;
-			font-size: 2.25em;
-			line-height: 1em;
-			margin:0;
-		}
-		h5{
-			font-style: uppercase;
-			font-family: CooperHewitt-Semibold;
-			font-weight: normal;
-			font-size: 1.5em;
-			line-height: 1em;
-			margin:0;
-		}
-		h6{
-			font-style: uppercase;
-			font-family: CooperHewitt-Heavy;
-			font-weight: normal;
-			font-size: 1em;
-			line-height: 1em;
-			margin:0;
-		}
+h1{
+	font-family: CooperHewitt-Medium;
+	font-weight:normal;
+	font-size: 5em;
+	text-transform: uppercase;
+	line-height: 1em;
+	margin-top:10px;
+	margin-bottom: 10px;
+}
+h2{
+	font-style: uppercase;
+	font-family: CooperHewitt-Medium;
+	font-weight: normal;
+	font-size: 4em;
+	line-height: 1em;
+	margin:0;
+}
+h3{
+	font-style: uppercase;
+	font-family: CooperHewitt-Medium;
+	font-weight: normal;
+	font-size: 3em;
+	line-height: 1em;
+	margin:0;
+}
+h4{
+	font-style: uppercase;
+	font-family: CooperHewitt-Medium;
+	font-weight: normal;
+	font-size: 2.25em;
+	line-height: 1em;
+	margin:0;
+}
+h5{
+	font-style: uppercase;
+	font-family: CooperHewitt-Semibold;
+	font-weight: normal;
+	font-size: 1.5em;
+	line-height: 1em;
+	margin:0;
+}
+h6{
+	font-style: uppercase;
+	font-family: CooperHewitt-Heavy;
+	font-weight: normal;
+	font-size: 1em;
+	line-height: 1em;
+	margin:0;
+}
 
-		/* Text elements & specials */
-		p{
-			font-family: CooperHewitt-Book;
-			font-weight: normal;
-			font-size: 1em;
-		}
+/* Text elements & specials */
+p{
+	font-family: CooperHewitt-Book;
+	font-weight: normal;
+	font-size: 1em;
+}
 
-		li{
-			padding-left: 2px;
-			font-family: CooperHewitt-Medium;
-		}
-		.title-callout {
-			color:#aaa;
-			font-family: CooperHewitt-Medium;
-		}
-		.callout {
-			font-family: CooperHewitt-Bold;
-			color: #fff;
-		}
-		a {
-			color: #e53e22;
-		}
+li{
+	padding-left: 2px;
+	font-family: CooperHewitt-Medium;
+}
+.title-callout {
+	color:#aaa;
+	font-family: CooperHewitt-Medium;
+}
+.callout {
+	font-family: CooperHewitt-Bold;
+	color: #fff;
+}
+a {
+	color: #e53e22;
+}
 
-		a:hover {
-			color: #ff4343;
+a:hover {
+	color: #ff4343;
 
-		}
+}
 
-		#why {
-			float:right;
-			font-family: CooperHewitt-Thin;
-			text-transform: uppercase;
-			font-size: 1em;
-		}
-		#logo {
-			position:relative;
-			float:left;
-		}
+#why {
+	float:right;
+	font-family: CooperHewitt-Thin;
+	text-transform: uppercase;
+	font-size: 1em;
+}
+#logo {
+	position:relative;
+	float:left;
+}
 
-		#why a{
-				color: #f48f00;
-		}
-	</style>
-</head>
-<body>
-	<div id="content">
-		<div id="header">
-			<div id="logo">
-				<h1>Chicago<span class="title-callout">Hacks</span>Big</h1>
+#why a{
+		color: #f48f00;
+}
+{% endblock %}
+{% block container %}
+<div class="container" id="main_container">
+	<div class="row">
+		<div id="info">
+			<div id="header">
+				<div id="logo">
+					<h1>Chicago<span class="title-callout">Hacks</span>Big</h1>
+				</div>
+				<div id="why">
+					<a href="#">Why Are We Doing This?</a>
+				</div>
 			</div>
-			<div id="why">
-				<a href="#">Why Are We Doing This?</a>
-			</div>
+			<div style="clear:both;"></div>
+			<p>We created 4,500+ geofences around live music venues in 16 U.S. cities. We captured visit data to these geofences during the evening of February 18th and the morning of February 19th, 2016 in collaboration with DoStuff, whose app had 10,000+ users share location data.</p>
+			<p>We published 13,000+ geofence visits using Gimbal (the SDK inside DoStuff's app) and we are visualizing live music attendees' real-life data using D3, Bootstrap, Gimbal SDKs, Heatmap.js, InfluxDB, JQuery, Leaflet, NVD3, Python and THREEJS.</p>
+			<p><span class="callout">Our Promise:</span>  ChicagoHacksBig will donate 100% of all prize money to Smart Chicago, who helps Chicago Youth learn tech skills as a mission-driven non-profit. (<a href="https://twitter.com/hashtag/chihacksbig" target="_blank">#chihacksbig</a> on Twitter for more)</p>
 		</div>
-		<div style="clear:both;"></div>
-		<p>We created 4,500+ geofences around live music venues in 16 U.S. cities. We captured visit data to these geofences during the evening of February 18th and the morning of February 19th, 2016 in collaboration with DoStuff, whose app had 10,000+ users share location data.</p>
-		<p>We published 13,000+ geofence visits using Gimbal (the SDK inside DoStuff's app) and we are visualizing live music attendees' real-life data using D3, Bootstrap, Gimbal SDKs, Heatmap.js, InfluxDB, JQuery, Leaflet, NVD3, Python and THREEJS.</p>
-		<p><span class="callout">Our Promise:</span>  ChicagoHacksBig will donate 100% of all prize money to Smart Chicago, who helps Chicago Youth learn tech skills as a mission-driven non-profit. (<a href="https://twitter.com/hashtag/chihacksbig" target="_blank">#chihacksbig</a> on Twitter for more)</p>
 	</div>
-</body>
-</html>
+</div>
+{% endblock %}

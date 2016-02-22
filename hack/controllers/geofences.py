@@ -39,12 +39,12 @@ def get_location(id):
 class Index(MethodView):
 
     def get(self):
-        return render_template("index.html", locations=locations)
+        return render_template("index.html", locs=locations)
 
 class Index2(MethodView):
 
     def get(self):
-        return render_template("intro.html", locations=locations)
+        return render_template("intro.html", locs=locations)
 
 class ScatterPlot(MethodView):
     def get(self):
@@ -58,7 +58,7 @@ class ScatterPlot(MethodView):
                 'size':20,
                 'shape':'circle',
             } for p in i[1]]})
-        return render_template("geofence/scatterplot.html", data=json.dumps(data))
+        return render_template("geofence/scatterplot.html", data=json.dumps(data), locs=locations)
 
 class StreamGraph(MethodView):
     def get(self):
@@ -72,7 +72,7 @@ class StreamGraph(MethodView):
                 'size':20,
                 'shape':'circle',
             } for p in i[1]]})
-        return render_template("geofence/streamgraph.html", data=json.dumps(data))
+        return render_template("geofence/streamgraph.html", data=json.dumps(data), locs=locations)
 
 class StreamGraphCount(MethodView):
     def get(self):
@@ -86,7 +86,7 @@ class StreamGraphCount(MethodView):
                 'size':20,
                 'shape':'circle',
             } for p in i[1]]})
-        return render_template("geofence/streamgraph.html", data=json.dumps(data))
+        return render_template("geofence/streamgraph.html", data=json.dumps(data), locs=locations)
 
 class StreamGraphMetro(MethodView):
     def get(self, metro_id):
@@ -102,7 +102,7 @@ class StreamGraphMetro(MethodView):
                 'size':20,
                 'shape':'circle',
             } for p in i[1]]})
-        return render_template("geofence/streamgraph.html", data=json.dumps(data), name=location['name'])
+        return render_template("geofence/streamgraph.html", data=json.dumps(data), name=location['name'], locs=locations)
 
 class MapView(MethodView):
 
@@ -116,7 +116,7 @@ class MapView(MethodView):
                 'lat':i['tags']['lat'],
                 'lng':i['tags']['lng'],
             })
-        return render_template("geofence/map.html", data=json.dumps(data))
+        return render_template("geofence/map.html", data=json.dumps(data), locs=locations)
 
 class MapHeatmapAnimatedView(MethodView):
 
@@ -130,7 +130,7 @@ class MapHeatmapAnimatedView(MethodView):
                 'lat':i['tags']['lat'],
                 'lng':i['tags']['lng'],
             })
-        return render_template("geofence/mapanimated.html", data=json.dumps(data), locations=json.dumps(locations))
+        return render_template("geofence/mapanimated.html", data=json.dumps(data), locations=json.dumps(locations), locs=locations)
 
 class MapHeatmapMetroView(MethodView):
 
@@ -144,7 +144,7 @@ class MapHeatmapMetroView(MethodView):
                 'lat':i['tags']['lat'],
                 'lng':i['tags']['lng'],
             })
-        return render_template("geofence/mapmetro.html", data=json.dumps(data), metro_id=metro_id, locations=json.dumps(locations))
+        return render_template("geofence/mapmetro.html", data=json.dumps(data), metro_id=metro_id, locations=json.dumps(locations), locs=locations)
 
 class MapSightingsMetroView(MethodView):
 
@@ -162,7 +162,7 @@ class MapSightingsMetroView(MethodView):
                 'time':i['time'],
                 'place_id':i['place_id']
             })
-        return render_template("geofence/mapmetrosightings.html", data=json.dumps(data), metro_id=metro_id, locations=json.dumps(locations))
+        return render_template("geofence/mapmetrosightings.html", data=json.dumps(data), metro_id=metro_id, locations=json.dumps(locations), locs=locations)
 
 class MapSightingsMultipleMetroView(MethodView):
 
@@ -181,7 +181,7 @@ class MapSightingsMultipleMetroView(MethodView):
                     'time':i['time'],
                     'place_id':i['place_id']
                 })
-        return render_template("geofence/multiplemaps.html", data=json.dumps(metros), locations=json.dumps(locations))
+        return render_template("geofence/multiplemaps.html", data=json.dumps(metros), locations=json.dumps(locations), locs=locations)
 
 
 class Circles(MethodView):
@@ -196,7 +196,7 @@ class Circles(MethodView):
             for p in i[1]:
                 place.append(p)
 
-        return render_template('3d.html', data=json.dumps(data))
+        return render_template('3d.html', data=json.dumps(data), locs=locations)
 
 geofence.add_url_rule("/", view_func=Index2.as_view('index'))
 geofence.add_url_rule("/scatterplot", view_func=ScatterPlot.as_view('scatterplot'))

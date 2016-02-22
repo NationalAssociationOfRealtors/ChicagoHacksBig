@@ -4,47 +4,6 @@
 		<title>{% block title %}{% endblock %}Chicago Hacks Big!</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-			@font-face {
-			    font-family: 'CooperHewitt-Bold';
-			    src: url('fonts/CooperHewitt-Bold.woff') format('woff');
-			    font-style: bold;
-			}
-			@font-face {
-			    font-family: 'CooperHewitt-Book';
-			    src: url('fonts/CooperHewitt-Book.woff') format('woff');
-			}
-			@font-face {
-			    font-family: 'CooperHewitt-Heavy';
-			    src: url('fonts/CooperHewitt-Heavy.woff') format('woff');
-			    font-style: bold;
-			}
-			@font-face {
-			    font-family: 'CooperHewitt-Light';
-			    src: url('fonts/CooperHewitt-Light.woff') format('woff');
-			}
-			@font-face {
-			    font-family: 'CooperHewitt-Medium';
-			    src: url('fonts/CooperHewitt-Medium.woff') format('woff');
-			}
-			@font-face {
-			    font-family: 'CooperHewitt-Semibold';
-			    src: url('fonts/CooperHewitt-Semibold.woff') format('woff');
-			    font-style: bold;
-			}
-			@font-face {
-			    font-family: 'CooperHewitt-Thin';
-			    src: url('fonts/CooperHewitt-Thin.woff') format('woff');
-			}
-
-			.content{
-		    	margin-top: 55px;
-			}
-
-		</style>
-		<style>
-            {% block style %}{% endblock %}
-		</style>
 		<script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
         <script src="/static/bower_components/d3/d3.min.js"></script>
         <script src="/static/bower_components/nvd3/build/nv.d3.min.js"></script>
@@ -61,11 +20,129 @@
         <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 		<link href="/static/img/favicon.ico" rel="icon" type="image/x-icon" />
+		<style>
+			{% block style %}{% endblock %}
+		</style>
+		<style>
+			@font-face {
+				font-family: 'CooperHewitt-Bold';
+				src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Bold.woff') format('woff');
+				font-style: bold;
+			}
+			@font-face {
+				font-family: 'CooperHewitt-Book';
+				src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Book.woff') format('woff');
+			}
+			@font-face {
+				font-family: 'CooperHewitt-Heavy';
+				src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Heavy.woff') format('woff');
+				font-style: bold;
+			}
+			@font-face {
+				font-family: 'CooperHewitt-Light';
+				src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Light.woff') format('woff');
+			}
+			@font-face {
+				font-family: 'CooperHewitt-Medium';
+				src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Medium.woff') format('woff');
+			}
+			@font-face {
+				font-family: 'CooperHewitt-Semibold';
+				src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Semibold.woff') format('woff');
+				font-style: bold;
+			}
+			@font-face {
+				font-family: 'CooperHewitt-Thin';
+				src: url('/static/bower_components/bootstrap/fonts/CooperHewitt-Thin.woff') format('woff');
+			}
+			h1{
+				font-family: CooperHewitt-Medium;
+				font-weight:normal;
+				font-size: 5em;
+				text-transform: uppercase;
+				line-height: 1em;
+				margin-top:10px;
+				margin-bottom: 10px;
+			}
+			h2{
+				font-style: uppercase;
+				font-family: CooperHewitt-Medium;
+				font-weight: normal;
+				font-size: 4em;
+				line-height: 1em;
+				margin:0;
+			}
+			h3{
+				font-style: uppercase;
+				font-family: CooperHewitt-Medium;
+				font-weight: normal;
+				font-size: 3em;
+				line-height: 1em;
+				margin:0;
+			}
+			h4{
+				font-style: uppercase;
+				font-family: CooperHewitt-Medium;
+				font-weight: normal;
+				font-size: 2.25em;
+				line-height: 1em;
+				margin:0;
+			}
+			h5{
+				font-style: uppercase;
+				font-family: CooperHewitt-Semibold;
+				font-weight: normal;
+				font-size: 1.5em;
+				line-height: 1em;
+				margin:0;
+			}
+			h6{
+				font-style: uppercase;
+				font-family: CooperHewitt-Heavy;
+				font-weight: normal;
+				font-size: 1em;
+				line-height: 1em;
+				margin:0;
+			}
+
+			/* Text elements & specials */
+			p{
+				font-family: CooperHewitt-Book;
+				font-weight: normal;
+				font-size: 1em;
+			}
+
+			li{
+				padding-left: 2px;
+				font-family: CooperHewitt-Medium;
+			}
+			.title-callout {
+				color:#aaa;
+				font-family: CooperHewitt-Medium;
+			}
+			.callout {
+				font-family: CooperHewitt-Bold;
+				color: #fff;
+			}
+			a {
+				color: #e53e22;
+			}
+
+			a:hover {
+				color: #ff4343;
+
+			}
+
+			#main_container{
+				margin-top: 50px;
+			}
+
+		</style>
 	</head>
 	<body>
         {% block body %}
         {% block menu %}
-        <nav class="navbar navbar-default navbar-fixed-top">
+        <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
             {% block menu_items %}
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -83,15 +160,25 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li><a href="/">Dashboard</a></li>
+                        <li><a href="/">#CHIHACKSBIG</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                                Chicago Hacks Big!
+                                Visualizations
                                 <span class="caret"></span>
                             </a>
+							<ul class="dropdown-menu">
+								<li class="dropdown-header">Comparison</li>
+								<li><a href="{{url_for('.mapmulitplemetrosightings', metro_ids='3,1,30,19')}}">Portland, LA, Austin and Chicago</a></li>
+								<li class="dropdown-header">National</li>
+								<li><a href="{{url_for('.circles')}}">3D</a></li>
+								<li><a href="{{url_for('.map')}}">Map (zoom and click around)</a></li>
+								<li class="dropdown-header">Metros</li>
+								{% for l in locs %}
+						            <li><a href="{{url_for('.streamgraphmetro', metro_id=l.id)}}">{{l.name}}</a></li>
+						        {% endfor %}
+							</ul>
                         </li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
@@ -99,7 +186,7 @@
             </nav>
             {% endblock %}
             {% block container %}
-            <div class='container main'>
+            <div class='container main' id='main_container'>
                 <div id="notifications" class="row notifications">
                     {% with messages = get_flashed_messages(with_categories=True) %}
                         {% if messages %}
@@ -123,13 +210,12 @@
     {% block javascript %}{% endblock %}
     </body>
     <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-70365075-2', 'auto');
-  ga('send', 'pageview');
-
-</script>
+		ga('create', 'UA-70365075-2', 'auto');
+		ga('send', 'pageview');
+	</script>
 </html>

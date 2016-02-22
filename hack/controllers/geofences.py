@@ -182,11 +182,11 @@ class MapSightingsMultipleMetroView(MethodView):
 class Circles(MethodView):
 
     def get(self):
-        q = "SELECT COUNT(visits) as visits, MEAN(dwell_time) as dwell_time FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' GROUP BY metro_id,place_name,time(15m) fill(0)"
+        q = "SELECT COUNT(visits) as visits, MEAN(dwell_time) as dwell_time FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' GROUP BY metro_title,place_name,time(15m) fill(0)"
         res = g.INFLUX.query(q)
         data = {}
         for i in res.items():
-            metro = data.setdefault("metro_{}".format(i[0][1]['metro_id']), {})
+            metro = data.setdefault("metro_{}".format(i[0][1]['metro_title']), {})
             place = metro.setdefault(i[0][1]['place_name'], [])
             for p in i[1]:
                 place.append(p)

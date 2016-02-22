@@ -9,6 +9,16 @@ canvas { width: 100%; height: 100% }
     height: 45px;
     padding: 7px;
 }
+
+#info {
+    position: absolute;
+    top: 75px;
+    right: 50px;
+    height: 45px;
+    padding: 7px;
+    background-color: #333333;
+    color: #FFFFFF;
+}
 {% endblock %}
 
 {% block container %}
@@ -28,7 +38,8 @@ canvas { width: 100%; height: 100% }
         }
         console.log(data);
         var container;
-        var camera, controls, scene, renderer;
+        var camera, controls, scene, renderer, raycaster, mouse, INTERSECTED;
+        var all_lines = [];
         var group = new THREE.Object3D();
 
         var metros = []
@@ -40,9 +51,15 @@ canvas { width: 100%; height: 100% }
             var met = data[m];
             var c = Object.keys(met).length;
             if(c > 20){
+                var vens = [];
+                for(var i in met){
+                    var obj = {points:met[i], name:i, metro:m};
+                    vens.push(obj);
+                }
                 metros.push({
                     id:m,
                     count:Object.keys(met).length,
+                    venues:vens,
                     radius:start_radius+(counter*spacing),
                     color:colors[counter],
                 })
@@ -52,7 +69,7 @@ canvas { width: 100%; height: 100% }
 
         init();
 
-        function build(count, radius, color){
+        function build(count, radius, color, vens){
             var venues = [];
             var lines = [];
             for(var i=0; i<count; i++){
@@ -92,28 +109,43 @@ canvas { width: 100%; height: 100% }
                         venues[i]
                     )
                 )
-                group.add(new THREE.Line(l, material2));
+                var li = new THREE.Line(l, material2);
+                console.log(vens[i]);
+                li.userData = vens[i];
+                group.add(li);
                 lines.push(l);
+                all_lines.push(li);
             }
             return {lines:lines, venues:venues, group:group};
+        }
+
+        function MouseMove(event){
+            mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
         }
 
         function init(){
             container = document.createElement( 'div' );
             var timestamp = document.createElement('div');
             timestamp.id = 'timestamp';
+            var info = document.createElement('div');
+            info.id = 'info';
             document.body.appendChild( container );
+            raycaster = new THREE.Raycaster();
+			mouse = new THREE.Vector2();
+            document.addEventListener( 'mousemove', MouseMove, false );
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000 );
             camera.position.set(0, -200,  30);
+            camera.zoom = 2;
+            camera.updateProjectionMatrix();
             camera.lookAt( scene.position );
 
             for(var i in metros){
                 var m = metros[i];
-                m.data = build(m.count, m.radius, m.color);
+                m.data = build(m.count, m.radius, m.color, m.venues);
                 group.add(m.data.group);
             }
-
             scene.add(group);
 
             renderer = new THREE.WebGLRenderer( { antialias: true } ); // WebGLRenderer CanvasRenderer
@@ -123,13 +155,20 @@ canvas { width: 100%; height: 100% }
             controls = new THREE.OrbitControls( camera, renderer.domElement );
             container.appendChild( renderer.domElement );
             container.appendChild( timestamp );
+            container.appendChild( info );
             update_controls();
         }
 
         function update_controls(){
             requestAnimationFrame(update_controls);
+            raycaster.setFromCamera( mouse, camera );
+            var intersects = raycaster.intersectObjects(all_lines);
+            for ( var i = 0; i < intersects.length; i++ ) {
+                var d = intersects[i].object.userData;
+                $("#info").html(d.metro.substr(6)+": "+d.name);
+            }
             controls.update();
-            group.rotation.z+=.002;
+            group.rotation.z+=.001;
             render();
         }
 

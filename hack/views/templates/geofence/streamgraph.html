@@ -13,10 +13,7 @@
 {% endblock %}
 
 {% block content %}
-<br><br>
 <h2>{{name}}</h2
-With their permission, we captured data from visitors to live music venues in this metro area. This graph shows how many of our data volunteers were at a venue during the 14 hours they allowed us to follow them.
-
 <div id="chart"><svg></svg></div>
 <script>
     var data = {{data|safe}};

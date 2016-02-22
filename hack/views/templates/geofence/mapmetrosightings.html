@@ -3,6 +3,30 @@
     #map{
         margin-top: 50px;
     }
+
+    #links.leaflet-bar a, a:hover {
+        background-color: #fff;
+        border-bottom: 1px solid #ccc;
+        width: 100px;
+        height: 26px;
+        line-height: 26px;
+        display: block;
+        text-align: left;
+        text-decoration: none;
+        color: black;
+    }
+
+    #links.leaflet-bar a{
+        background-color: #fff;
+        border-bottom: 1px solid #ccc;
+        width: 100px;
+        height: 26px;
+        line-height: 26px;
+        display: block;
+        text-align: left;
+        text-decoration: none;
+        color: black;
+    }
 {% endblock %}
 
 {% block container %}
@@ -25,6 +49,22 @@
             container.style.backgroundColor = 'white';
             container.style.width = '260px';
             container.style.height = '30px';
+            container.style.padding = '7px';
+            return container;
+        }
+    });
+
+    var Links = L.Control.extend({
+        options: {
+            position: 'topright'
+            //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
+        },
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            container.id = "links";
+            container.style.backgroundColor = 'white';
+            container.style.width = '200px';
+            container.style.height = '100px';
             container.style.padding = '7px';
             return container;
         }
@@ -76,6 +116,8 @@
         zoom: 12,
     });
     map.addControl(new Timestamp());
+    map.addControl(new Links());
+    $("#links").html("<h5>Graph It!</h5><a href=\"{{url_for('.streamgraphmetro', metro_id=metro_id)}}\">Stream Graph</a>");
     heatmapLayer.addTo(map);
 
     var te = new TimespanEmitter(

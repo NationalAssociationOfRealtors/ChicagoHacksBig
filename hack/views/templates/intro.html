@@ -186,17 +186,22 @@ h4.special{
 					<div role="tabpanel" class="tab-pane fade in active" id="compare">
 						<ul class="list-group">
 							<li class="list-group-item"><a href="{{url_for('.mapmulitplemetrosightings', metro_ids='3,1,30,19')}}">Portland, LA, Austin and Chicago</a></li>
+							<li class="list-group-item"><a href="{{url_for('.mapmulitplemetrosightings', metro_ids='19,9,32,18')}}">SF, Vancouver, Seattle and Portland</a></li>
+							<li class="list-group-item"><a href="{{url_for('.mapmulitplemetrosightings', metro_ids='10,30,1,42')}}">Indianapolis, Austin, LA and NY</a></li>
+							<li class="list-group-item"><a href="{{url_for('.mapmulitplemetrosightings', metro_ids='19,1,10,3')}}">Chicago, NY, Austin and Portland</a></li>
 						</ul>
 					</div>
 					<div role="tabpanel" class="tab-pane fade" id="national">
 						<ul class="list-group">
 							<li class="list-group-item"><a href="{{url_for('.circles')}}">3D</a></li>
+							<li class="list-group-item"><a href="{{url_for('.streamgraph')}}">Stream Graph Dwell</a></li>
+							<li class="list-group-item"><a href="{{url_for('.streamgraphcount')}}">Stream Graph Count</a></li>
 							<li class="list-group-item"><a href="{{url_for('.map')}}">Map (zoom and click around)</a></li>
 						</ul>
 					</div>
 					<div role="tabpanel" class="tab-pane fade" id="metro">
 						{% for l in locs %}
-							<li class="list-group-item"><a href="{{url_for('.streamgraphmetro', metro_id=l.id)}}">{{l.name}}</a></li>
+							<li class="list-group-item"><a href="{{url_for('.mapmetrosightings', metro_id=l.id)}}">{{l.name}}</a></li>
 						{% endfor %}
 					</div>
 				</div>

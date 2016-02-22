@@ -41,6 +41,11 @@ class Index(MethodView):
     def get(self):
         return render_template("index.html", locations=locations)
 
+class Index2(MethodView):
+
+    def get(self):
+        return render_template("intro.html", locations=locations)
+
 class ScatterPlot(MethodView):
     def get(self):
         q = "SELECT MEAN(dwell_time) as mean FROM \"geofence.sighting\" WHERE time > '2016-02-18T22:00:00Z' and time < '2016-02-19T12:00:00Z' GROUP BY metro_title,time(1h) fill(0)"
@@ -193,7 +198,7 @@ class Circles(MethodView):
 
         return render_template('3d.html', data=json.dumps(data))
 
-geofence.add_url_rule("/", view_func=Index.as_view('index'))
+geofence.add_url_rule("/", view_func=Index2.as_view('index'))
 geofence.add_url_rule("/scatterplot", view_func=ScatterPlot.as_view('scatterplot'))
 geofence.add_url_rule("/streamgraph", view_func=StreamGraph.as_view('streamgraph'))
 geofence.add_url_rule("/streamgraphcount", view_func=StreamGraphCount.as_view('streamgraphcount'))

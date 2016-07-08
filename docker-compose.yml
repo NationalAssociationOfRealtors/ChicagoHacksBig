@@ -1,9 +1,9 @@
 influxdb:
     image: tutum/influxdb
     hostname: influxdb
-    ports:
-        - "8086:8086"
-        - "8083:8083"
+    expose:
+        - "8086"
+        - "8083"
     environment:
         INFLUXDB_VERSION: 0.9.6.1
 
